@@ -205,4 +205,5 @@ make prod-output
 
 1. **Keep `.keys/` Git-Ignored**: All service account keys and OAuth secret JSON files are stored in `terraform/.keys/` which is ignored by `.git`. Never commit credentials to version control.
 2. **Offline Credential Hand-off**: For production or new developer onboarding, team leads must securely share the `.keys/` files through an offline/secure channel.
-3. **Environment Isolation**: Always run `make dev-init` or `make prod-init` when switching environments. The Makefile automatically cleans local `.terraform` caches to guarantee there is never any state leakage between Dev and Prod.
+3. **Environment Isolation via `TF_DATA_DIR`**: The Makefile automatically isolates Dev and Prod into independent data caches (`.terraform.dev` and `.terraform.prod`). Once initialized with `make dev-init` and `make prod-init`, you can run `dev` and `prod` commands interchangeably without needing to re-initialize or clean caches.
+

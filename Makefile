@@ -6,9 +6,13 @@ DEV_OAUTH_KEY  ?= $(CURDIR)/terraform/.keys/dev-gcp-oauth-client-secret.json
 PROD_SA_KEY    ?= $(CURDIR)/terraform/.keys/prod-gcp-sa-key.json
 PROD_OAUTH_KEY ?= $(CURDIR)/terraform/.keys/prod-gcp-oauth-client-secret.json
 
-# Isolate execution from local ambient gcloud state
-DEV_ENV_VARS  = GOOGLE_APPLICATION_CREDENTIALS="$(DEV_SA_KEY)" CLOUDSDK_CORE_PROJECT="" CLOUDSDK_BILLING_QUOTA_PROJECT=""
-PROD_ENV_VARS = GOOGLE_APPLICATION_CREDENTIALS="$(PROD_SA_KEY)" CLOUDSDK_CORE_PROJECT="" CLOUDSDK_BILLING_QUOTA_PROJECT=""
+# Environment-specific isolated Terraform data/cache directories (TF_DATA_DIR)
+DEV_DATA_DIR   ?= $(CURDIR)/terraform/.terraform.dev
+PROD_DATA_DIR  ?= $(CURDIR)/terraform/.terraform.prod
+
+# Isolate execution from local ambient gcloud state and isolate environment caches
+DEV_ENV_VARS  = TF_DATA_DIR="$(DEV_DATA_DIR)" GOOGLE_APPLICATION_CREDENTIALS="$(DEV_SA_KEY)" CLOUDSDK_CORE_PROJECT="" CLOUDSDK_BILLING_QUOTA_PROJECT=""
+PROD_ENV_VARS = TF_DATA_DIR="$(PROD_DATA_DIR)" GOOGLE_APPLICATION_CREDENTIALS="$(PROD_SA_KEY)" CLOUDSDK_CORE_PROJECT="" CLOUDSDK_BILLING_QUOTA_PROJECT=""
 
 help:
 	@echo "Peer Coaching Network - Infrastructure Commands"
@@ -29,7 +33,7 @@ help:
 	@echo ""
 	@echo "Utilities:"
 	@echo "  make fmt          - Format all Terraform files"
-	@echo "  make clean        - Remove local .terraform cache and state locks"
+	@echo "  make clean        - Remove local .terraform caches and state locks"
 
 # Pre-flight check to ensure required credentials exist
 check-dev-keys:
@@ -56,10 +60,10 @@ check-prod-keys:
 		exit 1; \
 	fi
 
-# Clean local terraform cache
+# Clean local terraform caches
 clean:
-	@echo "Cleaning local terraform cache..."
-	@rm -rf terraform/.terraform terraform/.terraform.lock.hcl
+	@echo "Cleaning local terraform caches..."
+	@rm -rf terraform/.terraform terraform/.terraform.dev terraform/.terraform.prod terraform/.terraform.lock.hcl
 
 # Format terraform code
 fmt:
@@ -67,8 +71,8 @@ fmt:
 	@terraform fmt -recursive terraform/
 
 # === DEV ENVIRONMENT ===
-dev-init: clean check-dev-keys
-	@echo "Initializing Dev Environment with GCS backend..."
+dev-init: check-dev-keys
+	@echo "Initializing Dev Environment (Cache: .terraform.dev)..."
 	@$(DEV_ENV_VARS) cd terraform && terraform init -backend-config=environments/dev/backend.conf -reconfigure
 
 dev-plan: check-dev-keys
@@ -88,8 +92,8 @@ dev-destroy: check-dev-keys
 	@$(DEV_ENV_VARS) cd terraform && terraform destroy -var-file=environments/dev/terraform.tfvars
 
 # === PROD ENVIRONMENT ===
-prod-init: clean check-prod-keys
-	@echo "Initializing Prod Environment with GCS backend..."
+prod-init: check-prod-keys
+	@echo "Initializing Prod Environment (Cache: .terraform.prod)..."
 	@$(PROD_ENV_VARS) cd terraform && terraform init -backend-config=environments/prod/backend.conf -reconfigure
 
 prod-plan: check-prod-keys
