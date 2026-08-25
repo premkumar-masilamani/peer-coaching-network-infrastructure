@@ -24,7 +24,8 @@ variable "enable_services" {
     "cloudfunctions.googleapis.com",
     "cloudbuild.googleapis.com",
     "artifactregistry.googleapis.com",
-    "run.googleapis.com"
+    "run.googleapis.com",
+    "calendar-json.googleapis.com"
   ]
 }
 

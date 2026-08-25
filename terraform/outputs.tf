@@ -32,3 +32,8 @@ output "firebase_web_app_id" {
   description = "Firebase Web App ID"
   value       = module.firebase.firebase_web_app_id
 }
+
+output "authorized_domains" {
+  description = "Authorized domains configured for Firebase Authentication / Identity Platform"
+  value       = module.google_core.authorized_domains
+}

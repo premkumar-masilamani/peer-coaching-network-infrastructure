@@ -46,6 +46,8 @@ This repository manages the Google Cloud Platform (GCP) and Firebase infrastruct
    - Identity Platform manages authentication.
    - **Google Sign-In is the ONLY allowed sign-in provider**.
    - Email/Password, Phone Number, and Anonymous sign-in providers are strictly **disabled**.
+   - **Authorized Domains in Terraform**: `local.peercoachingnetwork.com` and `dev.peercoachingnetwork.com` for Dev; `app.peercoachingnetwork.com` for Prod (plus `localhost` and `<project_id>.firebaseapp.com` / `<project_id>.web.app`).
+   - **GCP Console Security Boundary for OAuth 2.0 Web Client IDs**: Google does not expose an API or Terraform resource for generic OAuth 2.0 Client IDs. Web Client IDs are created via Console (`APIs & Services > Credentials`) with authorized JavaScript origins (`https://local.peercoachingnetwork.com:5173`, `https://dev.peercoachingnetwork.com`, `https://app.peercoachingnetwork.com`) and redirect URIs (`https://<project_id>.firebaseapp.com/__/auth/handler`), then downloaded to `.keys/`.
 5. **Division of Responsibilities**:
    - **This Repository (Terraform)**: GCP APIs, Firebase enablement, Firestore instance, Web App registration, Storage bucket, Identity Platform auth with Google Sign-In, Application Service Account.
    - **Application Repository (Firebase CLI)**: `firestore.rules`, `storage.rules`, Cloud Functions deployments, and Web Hosting deployments (`firebase deploy`).
