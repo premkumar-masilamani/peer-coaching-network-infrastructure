@@ -52,40 +52,6 @@ This repository manages the Google Cloud Platform (GCP) and Firebase infrastruct
 
 ---
 
-## Directory Structure & Keys Layout
-
-```
-peer-coaching-network-infrastructure/
-├── Makefile                                # Environment-aware workflow commands
-├── README.md                               # Human onboarding and bootstrap guide
-├── AGENTS.md                               # Agent guidelines and operating instructions
-└── terraform/
-    ├── main.tf                             # Root module linking google_core and firebase
-    ├── variables.tf                        # Root input variable definitions
-    ├── outputs.tf                          # Root output definitions (unmasked, safe outputs only)
-    ├── versions.tf                         # Terraform and Google/Google-Beta provider settings
-    ├── modules/
-    │   ├── google_core/                    # APIs, Identity Platform, App Service Account & IAM
-    │   └── firebase/                       # Firebase project, Firestore DB, Web App, Storage
-    └── environments/
-        ├── dev/
-        │   ├── backend.conf                # Dev GCS backend state bucket config
-        │   ├── terraform.tfvars            # Dev environment input values
-        │   └── .keys/                      # Git-ignored Dev credentials
-        │       ├── dev-gcp-sa-key.json
-        │       ├── dev-gcp-oauth-client-secret.json
-        │       └── dev-firebase-web-app-config.json
-        └── prod/
-            ├── backend.conf                # Prod GCS backend state bucket config
-            ├── terraform.tfvars            # Prod environment input values
-            └── .keys/                      # Git-ignored Prod credentials
-                ├── prod-gcp-sa-key.json
-                ├── prod-gcp-oauth-client-secret.json
-                └── prod-firebase-web-app-config.json
-```
-
----
-
 ## Credential Handling & Fail-Fast Rules
 
 1. **Self-Contained Credentials**:
