@@ -24,7 +24,7 @@
 | **GCP Projects & State** | **This Repo (Terraform)** | Project setup, GCS state buckets, service account permissions |
 | **GCP & Firebase APIs** | **This Repo (Terraform)** | Enables all 13 services (Firestore, Auth, Functions, Build, Run, etc.) |
 | **Database & Storage** | **This Repo (Terraform)** | Provisions Firestore (`pcn-dev` / `pcn-prod`) with deletion protection and Firebase Storage bucket |
-| **Authentication** | **This Repo (Terraform)** | Identity Platform, Email/Password, and mandatory Google OAuth Sign-In provider |
+| **Authentication** | **This Repo (Terraform)** | Identity Platform with Google OAuth Sign-In only (Email, Phone, Anonymous disabled) |
 | **Web App Registration** | **This Repo (Terraform)** | Registers Firebase Web App |
 | **Security Rules** | **App Repo (Firebase CLI)** | `firestore.rules` and `storage.rules` deployed via `firebase deploy --only firestore:rules,storage` |
 | **Cloud Functions** | **App Repo (Firebase CLI)** | Function source code and deployment via `firebase deploy --only functions` |

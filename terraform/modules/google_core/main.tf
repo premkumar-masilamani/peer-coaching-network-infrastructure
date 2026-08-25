@@ -29,15 +29,18 @@ resource "google_identity_platform_config" "auth_config" {
   sign_in {
     allow_duplicate_emails = false
 
+    # Email/Password Sign-In (Disabled - Google Sign-In only)
     email {
-      enabled           = true
-      password_required = true
+      enabled           = false
+      password_required = false
     }
 
+    # Phone Number Sign-In (Disabled)
     phone_number {
       enabled = false
     }
 
+    # Anonymous Sign-In (Disabled)
     anonymous {
       enabled = false
     }
@@ -55,7 +58,7 @@ resource "google_identity_platform_config" "auth_config" {
   depends_on = [google_project_service.services]
 }
 
-# 3. Google Sign-In Provider (Identity Platform Default Supported IDP - Mandatory)
+# 3. Google Sign-In Provider (Identity Platform Default Supported IDP - Mandatory & Sole Provider)
 resource "google_identity_platform_default_supported_idp_config" "google_sign_in" {
   provider      = google-beta
   project       = var.project_id
