@@ -4,15 +4,16 @@
 1. **Decentralized (No Central Project)**: `dev` and `prod` are isolated GCP projects. There is no shared management project.
 2. **Dedicated State Storage in GCS**: Each environment stores its own Terraform state in its own project's GCS bucket.
 3. **Automated Credentials & Secrets Loading**:
-   - Service account keys: `terraform/.keys/dev-gcp-sa-key.json` and `terraform/.keys/prod-gcp-sa-key.json`
-   - OAuth client secret JSON: `terraform/.keys/dev-gcp-oauth-client-secret.json` and `terraform/.keys/prod-gcp-oauth-client-secret.json`
-   - All credentials live in `terraform/.keys/` (git-ignored) and are auto-detected by Terraform/Makefile. No manual environment variable exports required!
-4. **Mandatory Credential Pre-flight**: If the SA key or OAuth client secret file is missing from `terraform/.keys/`, Terraform execution will fail fast. For projects already in production or new team members onboarding, obtain these environment-specific files offline from the team leads.
-5. **India Region (`asia-south1` - Mumbai)**: All regional compute, Firestore, Cloud Functions, and Cloud Storage resources reside in Mumbai for minimum latency for India-based users.
-6. **Custom Firestore Database Instances**:
+   - Dev credentials: `terraform/environments/dev/.keys/gcp-sa-key.json` and `terraform/environments/dev/.keys/gcp-oauth-client-secret.json`
+   - Prod credentials: `terraform/environments/prod/.keys/gcp-sa-key.json` and `terraform/environments/prod/.keys/gcp-oauth-client-secret.json`
+   - All credentials live self-contained inside `environments/<env>/.keys/` (git-ignored) and are auto-detected by Terraform/Makefile.
+4. **Mandatory Credential Pre-flight**: If the SA key or OAuth client secret file is missing from `terraform/environments/<env>/.keys/`, Terraform execution will fail fast. For projects already in production or new team members onboarding, obtain these environment-specific files offline from the team leads.
+5. **Environment Isolation via `TF_DATA_DIR`**: Dev and Prod maintain independent local caches (`.terraform.dev` and `.terraform.prod`). Once initialized, you can switch between environments interchangeably without re-initializing or wiping caches.
+6. **India Region (`asia-south1` - Mumbai)**: All regional compute, Firestore, Cloud Functions, and Cloud Storage resources reside in Mumbai for minimum latency for India-based users.
+7. **Custom Firestore Database Instances**:
    - Dev: `pcn-dev` (with deletion protection enabled)
    - Prod: `pcn-prod` (with deletion protection enabled)
-7. **Maximum Terraform Coverage**: Aside from the one-time project bootstrap, all APIs, Firebase settings, Auth providers (with mandatory Google Sign-In), database instances, storage buckets, and application service accounts are provisioned and tracked by Terraform.
+8. **Maximum Terraform Coverage**: Aside from the one-time project bootstrap, all APIs, Firebase settings, Auth providers (with mandatory Google Sign-In), database instances, storage buckets, and application service accounts are provisioned and tracked by Terraform.
 
 ---
 
@@ -90,8 +91,8 @@ gcloud projects add-iam-policy-binding "$DEV_PROJECT_ID" \
   --role="roles/owner"
 
 # 9. Generate and download the Service Account Key JSON
-mkdir -p terraform/.keys
-gcloud iam service-accounts keys create "terraform/.keys/dev-gcp-sa-key.json" \
+mkdir -p terraform/environments/dev/.keys
+gcloud iam service-accounts keys create "terraform/environments/dev/.keys/gcp-sa-key.json" \
   --iam-account="terraform-sa@${DEV_PROJECT_ID}.iam.gserviceaccount.com" \
   --project="$DEV_PROJECT_ID"
 ```
@@ -140,8 +141,8 @@ gcloud projects add-iam-policy-binding "$PROD_PROJECT_ID" \
   --role="roles/owner"
 
 # 8. Generate and download the Service Account Key JSON
-mkdir -p terraform/.keys
-gcloud iam service-accounts keys create "terraform/.keys/prod-gcp-sa-key.json" \
+mkdir -p terraform/environments/prod/.keys
+gcloud iam service-accounts keys create "terraform/environments/prod/.keys/gcp-sa-key.json" \
   --iam-account="terraform-sa@${PROD_PROJECT_ID}.iam.gserviceaccount.com" \
   --project="$PROD_PROJECT_ID"
 ```
@@ -158,8 +159,8 @@ Google Sign-In is **mandatory** for the application. To configure OAuth credenti
 4. Go to **Credentials** -> **Create Credentials** -> **OAuth Client ID** -> **Web application**.
 5. Click **Download JSON** on the created OAuth Client ID.
 6. Save the downloaded JSON directly to:
-   - For Dev: `terraform/.keys/dev-gcp-oauth-client-secret.json`
-   - For Prod: `terraform/.keys/prod-gcp-oauth-client-secret.json`
+   - For Dev: `terraform/environments/dev/.keys/gcp-oauth-client-secret.json`
+   - For Prod: `terraform/environments/prod/.keys/gcp-oauth-client-secret.json`
 
 *(Note: If either file is missing, Terraform execution will fail fast. For existing projects, obtain them offline from your team leads).*
 
@@ -186,7 +187,7 @@ make dev-output
 ### Managing the Production Environment
 
 ```bash
-# 1. Initialize Terraform for Prod (automatically cleans local cache)
+# 1. Initialize Terraform for Prod (uses independent .terraform.prod cache)
 make prod-init
 
 # 2. Preview the changes
@@ -203,7 +204,6 @@ make prod-output
 
 ## Security Best Practices
 
-1. **Keep `.keys/` Git-Ignored**: All service account keys and OAuth secret JSON files are stored in `terraform/.keys/` which is ignored by `.git`. Never commit credentials to version control.
-2. **Offline Credential Hand-off**: For production or new developer onboarding, team leads must securely share the `.keys/` files through an offline/secure channel.
+1. **Keep `.keys/` Git-Ignored**: All service account keys and OAuth secret JSON files are stored in `terraform/environments/<env>/.keys/` which is ignored by `.git`. Never commit credentials to version control.
+2. **Offline Credential Hand-off**: For production or new developer onboarding, team leads can simply share the specific environment's `.keys/` folder through an offline/secure channel.
 3. **Environment Isolation via `TF_DATA_DIR`**: The Makefile automatically isolates Dev and Prod into independent data caches (`.terraform.dev` and `.terraform.prod`). Once initialized with `make dev-init` and `make prod-init`, you can run `dev` and `prod` commands interchangeably without needing to re-initialize or clean caches.
-

@@ -1,10 +1,10 @@
 .PHONY: help clean fmt dev-init dev-plan dev-apply dev-output dev-destroy prod-init prod-plan prod-apply prod-output prod-destroy check-dev-keys check-prod-keys
 
-# Key file paths per environment
-DEV_SA_KEY     ?= $(CURDIR)/terraform/.keys/dev-gcp-sa-key.json
-DEV_OAUTH_KEY  ?= $(CURDIR)/terraform/.keys/dev-gcp-oauth-client-secret.json
-PROD_SA_KEY    ?= $(CURDIR)/terraform/.keys/prod-gcp-sa-key.json
-PROD_OAUTH_KEY ?= $(CURDIR)/terraform/.keys/prod-gcp-oauth-client-secret.json
+# Key file paths per environment (stored self-contained inside environments/<env>/.keys/)
+DEV_SA_KEY     ?= $(CURDIR)/terraform/environments/dev/.keys/gcp-sa-key.json
+DEV_OAUTH_KEY  ?= $(CURDIR)/terraform/environments/dev/.keys/gcp-oauth-client-secret.json
+PROD_SA_KEY    ?= $(CURDIR)/terraform/environments/prod/.keys/gcp-sa-key.json
+PROD_OAUTH_KEY ?= $(CURDIR)/terraform/environments/prod/.keys/gcp-oauth-client-secret.json
 
 # Environment-specific isolated Terraform data/cache directories (TF_DATA_DIR)
 DEV_DATA_DIR   ?= $(CURDIR)/terraform/.terraform.dev
@@ -39,24 +39,24 @@ help:
 check-dev-keys:
 	@if [ ! -f "$(DEV_SA_KEY)" ]; then \
 		echo "ERROR: Service account key not found at $(DEV_SA_KEY)"; \
-		echo "Please obtain the environment-specific credential files offline from the team leads and place them in terraform/.keys/"; \
+		echo "Please obtain the environment credential files offline from team leads and place them in terraform/environments/dev/.keys/"; \
 		exit 1; \
 	fi
 	@if [ ! -f "$(DEV_OAUTH_KEY)" ]; then \
 		echo "ERROR: OAuth client secret JSON not found at $(DEV_OAUTH_KEY)"; \
-		echo "Please obtain the environment-specific credential files offline from the team leads and place them in terraform/.keys/"; \
+		echo "Please obtain the environment credential files offline from team leads and place them in terraform/environments/dev/.keys/"; \
 		exit 1; \
 	fi
 
 check-prod-keys:
 	@if [ ! -f "$(PROD_SA_KEY)" ]; then \
 		echo "ERROR: Service account key not found at $(PROD_SA_KEY)"; \
-		echo "Please obtain the environment-specific credential files offline from the team leads and place them in terraform/.keys/"; \
+		echo "Please obtain the environment credential files offline from team leads and place them in terraform/environments/prod/.keys/"; \
 		exit 1; \
 	fi
 	@if [ ! -f "$(PROD_OAUTH_KEY)" ]; then \
 		echo "ERROR: OAuth client secret JSON not found at $(PROD_OAUTH_KEY)"; \
-		echo "Please obtain the environment-specific credential files offline from the team leads and place them in terraform/.keys/"; \
+		echo "Please obtain the environment credential files offline from team leads and place them in terraform/environments/prod/.keys/"; \
 		exit 1; \
 	fi
 

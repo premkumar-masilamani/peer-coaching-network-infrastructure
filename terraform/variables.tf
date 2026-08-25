@@ -33,7 +33,7 @@ variable "authorized_domains" {
 
 variable "oauth_client_secret_file" {
   type        = string
-  description = "Path to the downloaded OAuth 2.0 Client Secret JSON file (e.g. .keys/dev-gcp-oauth-client-secret.json)"
+  description = "Path to the downloaded OAuth 2.0 Client Secret JSON file (e.g. environments/dev/.keys/gcp-oauth-client-secret.json)"
 }
 
 variable "oauth_client_id" {
