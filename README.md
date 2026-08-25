@@ -4,9 +4,9 @@
 1. **Decentralized (No Central Project)**: `dev` and `prod` are isolated GCP projects. There is no shared management project.
 2. **Dedicated State Storage in GCS**: Each environment stores its own Terraform state in its own project's GCS bucket.
 3. **Automated Credentials & Secrets Loading**:
-   - Dev credentials: `terraform/environments/dev/.keys/gcp-sa-key.json` and `terraform/environments/dev/.keys/gcp-oauth-client-secret.json`
-   - Prod credentials: `terraform/environments/prod/.keys/gcp-sa-key.json` and `terraform/environments/prod/.keys/gcp-oauth-client-secret.json`
-   - All credentials live self-contained inside `environments/<env>/.keys/` (git-ignored) and are auto-detected by Terraform/Makefile.
+   - Dev credentials: `terraform/environments/dev/.keys/dev-gcp-sa-key.json` and `terraform/environments/dev/.keys/dev-gcp-oauth-client-secret.json`
+   - Prod credentials: `terraform/environments/prod/.keys/prod-gcp-sa-key.json` and `terraform/environments/prod/.keys/prod-gcp-oauth-client-secret.json`
+   - All credentials live self-contained inside `environments/<env>/.keys/` (git-ignored) with explicit `dev-` and `prod-` prefixes to prevent confusion during key distribution.
 4. **Mandatory Credential Pre-flight**: If the SA key or OAuth client secret file is missing from `terraform/environments/<env>/.keys/`, Terraform execution will fail fast. For projects already in production or new team members onboarding, obtain these environment-specific files offline from the team leads.
 5. **Environment Isolation via `TF_DATA_DIR`**: Dev and Prod maintain independent local caches (`.terraform.dev` and `.terraform.prod`). Once initialized, you can switch between environments interchangeably without re-initializing or wiping caches.
 6. **India Region (`asia-south1` - Mumbai)**: All regional compute, Firestore, Cloud Functions, and Cloud Storage resources reside in Mumbai for minimum latency for India-based users.
@@ -92,7 +92,7 @@ gcloud projects add-iam-policy-binding "$DEV_PROJECT_ID" \
 
 # 9. Generate and download the Service Account Key JSON
 mkdir -p terraform/environments/dev/.keys
-gcloud iam service-accounts keys create "terraform/environments/dev/.keys/gcp-sa-key.json" \
+gcloud iam service-accounts keys create "terraform/environments/dev/.keys/dev-gcp-sa-key.json" \
   --iam-account="terraform-sa@${DEV_PROJECT_ID}.iam.gserviceaccount.com" \
   --project="$DEV_PROJECT_ID"
 ```
@@ -142,7 +142,7 @@ gcloud projects add-iam-policy-binding "$PROD_PROJECT_ID" \
 
 # 8. Generate and download the Service Account Key JSON
 mkdir -p terraform/environments/prod/.keys
-gcloud iam service-accounts keys create "terraform/environments/prod/.keys/gcp-sa-key.json" \
+gcloud iam service-accounts keys create "terraform/environments/prod/.keys/prod-gcp-sa-key.json" \
   --iam-account="terraform-sa@${PROD_PROJECT_ID}.iam.gserviceaccount.com" \
   --project="$PROD_PROJECT_ID"
 ```
@@ -159,8 +159,8 @@ Google Sign-In is **mandatory** for the application. To configure OAuth credenti
 4. Go to **Credentials** -> **Create Credentials** -> **OAuth Client ID** -> **Web application**.
 5. Click **Download JSON** on the created OAuth Client ID.
 6. Save the downloaded JSON directly to:
-   - For Dev: `terraform/environments/dev/.keys/gcp-oauth-client-secret.json`
-   - For Prod: `terraform/environments/prod/.keys/gcp-oauth-client-secret.json`
+   - For Dev: `terraform/environments/dev/.keys/dev-gcp-oauth-client-secret.json`
+   - For Prod: `terraform/environments/prod/.keys/prod-gcp-oauth-client-secret.json`
 
 *(Note: If either file is missing, Terraform execution will fail fast. For existing projects, obtain them offline from your team leads).*
 

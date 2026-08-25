@@ -1,10 +1,10 @@
 .PHONY: help clean fmt dev-init dev-plan dev-apply dev-output dev-destroy prod-init prod-plan prod-apply prod-output prod-destroy check-dev-keys check-prod-keys
 
 # Key file paths per environment (stored self-contained inside environments/<env>/.keys/)
-DEV_SA_KEY     ?= $(CURDIR)/terraform/environments/dev/.keys/gcp-sa-key.json
-DEV_OAUTH_KEY  ?= $(CURDIR)/terraform/environments/dev/.keys/gcp-oauth-client-secret.json
-PROD_SA_KEY    ?= $(CURDIR)/terraform/environments/prod/.keys/gcp-sa-key.json
-PROD_OAUTH_KEY ?= $(CURDIR)/terraform/environments/prod/.keys/gcp-oauth-client-secret.json
+DEV_SA_KEY     ?= $(CURDIR)/terraform/environments/dev/.keys/dev-gcp-sa-key.json
+DEV_OAUTH_KEY  ?= $(CURDIR)/terraform/environments/dev/.keys/dev-gcp-oauth-client-secret.json
+PROD_SA_KEY    ?= $(CURDIR)/terraform/environments/prod/.keys/prod-gcp-sa-key.json
+PROD_OAUTH_KEY ?= $(CURDIR)/terraform/environments/prod/.keys/prod-gcp-oauth-client-secret.json
 
 # Environment-specific isolated Terraform data/cache directories (TF_DATA_DIR)
 DEV_DATA_DIR   ?= $(CURDIR)/terraform/.terraform.dev
