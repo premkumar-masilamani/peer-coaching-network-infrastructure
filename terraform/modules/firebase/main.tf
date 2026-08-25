@@ -17,7 +17,7 @@ resource "google_firebase_project" "firebase" {
   project  = var.project_id
 }
 
-# 2. Firestore Database (Custom Named Instance in Native Mode)
+# 2. Firestore Database (Custom Named Instance in Native Mode with Deletion Protection)
 resource "google_firestore_database" "database" {
   provider                = google-beta
   project                 = var.project_id
@@ -25,8 +25,8 @@ resource "google_firestore_database" "database" {
   location_id             = var.firebase_location
   type                    = "FIRESTORE_NATIVE"
   concurrency_mode        = "OPTIMISTIC"
-  delete_protection_state = var.firestore_delete_protection ? "DELETE_PROTECTION_ENABLED" : "DELETE_PROTECTION_DISABLED"
-  deletion_policy         = var.firestore_delete_protection ? "ABANDON" : "DELETE"
+  delete_protection_state = "DELETE_PROTECTION_ENABLED"
+  deletion_policy         = "ABANDON"
 
   depends_on = [google_firebase_project.firebase]
 }
@@ -40,16 +40,7 @@ resource "google_firebase_web_app" "web_app" {
   depends_on = [google_firebase_project.firebase]
 }
 
-# 4. Data Source for Firebase Web App Config (SDK credentials)
-data "google_firebase_web_app_config" "web_app_config" {
-  provider   = google-beta
-  project    = var.project_id
-  web_app_id = google_firebase_web_app.web_app.app_id
-
-  depends_on = [google_firebase_web_app.web_app]
-}
-
-# 5. Firebase Application Cloud Storage Bucket
+# 4. Firebase Application Cloud Storage Bucket
 resource "google_storage_bucket" "app_storage" {
   provider                    = google-beta
   project                     = var.project_id

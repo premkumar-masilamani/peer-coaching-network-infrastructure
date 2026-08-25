@@ -18,9 +18,3 @@ variable "firestore_database_id" {
   type        = string
   description = "The ID of the Firestore database (e.g. pcn-dev or pcn-prod)"
 }
-
-variable "firestore_delete_protection" {
-  type        = bool
-  description = "Whether to protect the Firestore database from deletion"
-  default     = false
-}

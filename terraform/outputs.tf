@@ -32,9 +32,3 @@ output "firebase_web_app_id" {
   description = "Firebase Web App ID"
   value       = module.firebase.firebase_web_app_id
 }
-
-output "firebase_web_app_config" {
-  description = "Firebase Web App Client SDK Configuration"
-  sensitive   = true
-  value       = module.firebase.firebase_web_app_config
-}

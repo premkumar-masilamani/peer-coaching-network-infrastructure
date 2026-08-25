@@ -25,12 +25,6 @@ variable "firestore_database_id" {
   description = "The ID of the Firestore database instance (e.g., pcn-dev or pcn-prod)"
 }
 
-variable "firestore_delete_protection" {
-  type        = bool
-  description = "Whether to protect the Firestore database from deletion (recommended true for prod, false for dev)"
-  default     = false
-}
-
 variable "authorized_domains" {
   type        = list(string)
   description = "Authorized domains for Firebase Authentication"
@@ -40,7 +34,6 @@ variable "authorized_domains" {
 variable "oauth_client_secret_file" {
   type        = string
   description = "Path to the downloaded OAuth 2.0 Client Secret JSON file (e.g. .keys/dev-gcp-oauth-client-secret.json)"
-  default     = ""
 }
 
 variable "oauth_client_id" {

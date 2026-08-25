@@ -47,9 +47,8 @@ resource "google_identity_platform_config" "auth_config" {
   depends_on = [google_project_service.services]
 }
 
-# 3. Google Sign-In Provider (Identity Platform Default Supported IDP)
+# 3. Google Sign-In Provider (Identity Platform Default Supported IDP - Mandatory)
 resource "google_identity_platform_default_supported_idp_config" "google_sign_in" {
-  count         = var.oauth_client_id != "" && var.oauth_client_secret != "" ? 1 : 0
   provider      = google-beta
   project       = var.project_id
   enabled       = true

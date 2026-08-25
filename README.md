@@ -7,11 +7,12 @@
    - Service account keys: `terraform/.keys/dev-gcp-sa-key.json` and `terraform/.keys/prod-gcp-sa-key.json`
    - OAuth client secret JSON: `terraform/.keys/dev-gcp-oauth-client-secret.json` and `terraform/.keys/prod-gcp-oauth-client-secret.json`
    - All credentials live in `terraform/.keys/` (git-ignored) and are auto-detected by Terraform/Makefile. No manual environment variable exports required!
-4. **India Region (`asia-south1` - Mumbai)**: All regional compute, Firestore, Cloud Functions, and Cloud Storage resources reside in Mumbai for minimum latency for India-based users.
-5. **Custom Firestore Database Instances**:
-   - Dev: `pcn-dev`
+4. **Mandatory Credential Pre-flight**: If the SA key or OAuth client secret file is missing from `terraform/.keys/`, Terraform execution will fail fast. For projects already in production or new team members onboarding, obtain these environment-specific files offline from the team leads.
+5. **India Region (`asia-south1` - Mumbai)**: All regional compute, Firestore, Cloud Functions, and Cloud Storage resources reside in Mumbai for minimum latency for India-based users.
+6. **Custom Firestore Database Instances**:
+   - Dev: `pcn-dev` (with deletion protection enabled)
    - Prod: `pcn-prod` (with deletion protection enabled)
-6. **Maximum Terraform Coverage**: Aside from the one-time project bootstrap, all APIs, Firebase settings, Auth providers, database instances, storage buckets, and application service accounts are provisioned and tracked by Terraform.
+7. **Maximum Terraform Coverage**: Aside from the one-time project bootstrap, all APIs, Firebase settings, Auth providers (with mandatory Google Sign-In), database instances, storage buckets, and application service accounts are provisioned and tracked by Terraform.
 
 ---
 
@@ -21,9 +22,9 @@
 | :--- | :--- | :--- |
 | **GCP Projects & State** | **This Repo (Terraform)** | Project setup, GCS state buckets, service account permissions |
 | **GCP & Firebase APIs** | **This Repo (Terraform)** | Enables all 13 services (Firestore, Auth, Functions, Build, Run, etc.) |
-| **Database & Storage** | **This Repo (Terraform)** | Provisions Firestore (`pcn-dev` / `pcn-prod`) and Firebase Storage bucket |
-| **Authentication** | **This Repo (Terraform)** | Identity Platform, Email/Password, and Google OAuth Sign-In provider |
-| **Web App Registration** | **This Repo (Terraform)** | Registers Firebase Web App and exports client SDK config |
+| **Database & Storage** | **This Repo (Terraform)** | Provisions Firestore (`pcn-dev` / `pcn-prod`) with deletion protection and Firebase Storage bucket |
+| **Authentication** | **This Repo (Terraform)** | Identity Platform, Email/Password, and mandatory Google OAuth Sign-In provider |
+| **Web App Registration** | **This Repo (Terraform)** | Registers Firebase Web App |
 | **Security Rules** | **App Repo (Firebase CLI)** | `firestore.rules` and `storage.rules` deployed via `firebase deploy --only firestore:rules,storage` |
 | **Cloud Functions** | **App Repo (Firebase CLI)** | Function source code and deployment via `firebase deploy --only functions` |
 | **Frontend Web App** | **App Repo (Firebase CLI)** | Application build and hosting via `firebase deploy --only hosting` |
@@ -149,7 +150,7 @@ gcloud iam service-accounts keys create "terraform/.keys/prod-gcp-sa-key.json" \
 
 ## Step 3: OAuth 2.0 Credentials (for Google Sign-In)
 
-To configure Google Sign-In with Firebase Authentication:
+Google Sign-In is **mandatory** for the application. To configure OAuth credentials:
 
 1. Open [Google Cloud Console Credentials Page](https://console.cloud.google.com/apis/credentials).
 2. Select your project (`pcn-dev-506605` or your prod project).
@@ -159,6 +160,8 @@ To configure Google Sign-In with Firebase Authentication:
 6. Save the downloaded JSON directly to:
    - For Dev: `terraform/.keys/dev-gcp-oauth-client-secret.json`
    - For Prod: `terraform/.keys/prod-gcp-oauth-client-secret.json`
+
+*(Note: If either file is missing, Terraform execution will fail fast. For existing projects, obtain them offline from your team leads).*
 
 ---
 
@@ -176,7 +179,7 @@ make dev-plan
 # 3. Apply changes to Dev
 make dev-apply
 
-# 4. View outputs (App SA email, Web App Config)
+# 4. View outputs (App SA email, Web App ID, Firestore details)
 make dev-output
 ```
 
@@ -198,21 +201,8 @@ make prod-output
 
 ---
 
-## Step 5: Exporting Frontend Firebase Web SDK Config
-
-To export the generated Firebase client SDK credentials for your frontend web application directly to the `.keys/` folder:
-
-```bash
-# For dev environment (exports to terraform/.keys/dev-firebase-web-app-config.json)
-make dev-config
-
-# For prod environment (exports to terraform/.keys/prod-firebase-web-app-config.json)
-make prod-config
-```
-
----
-
 ## Security Best Practices
 
 1. **Keep `.keys/` Git-Ignored**: All service account keys and OAuth secret JSON files are stored in `terraform/.keys/` which is ignored by `.git`. Never commit credentials to version control.
-2. **Environment Isolation**: Always run `make dev-init` or `make prod-init` when switching environments. The Makefile automatically cleans local `.terraform` caches to guarantee there is never any state leakage between Dev and Prod.
+2. **Offline Credential Hand-off**: For production or new developer onboarding, team leads must securely share the `.keys/` files through an offline/secure channel.
+3. **Environment Isolation**: Always run `make dev-init` or `make prod-init` when switching environments. The Makefile automatically cleans local `.terraform` caches to guarantee there is never any state leakage between Dev and Prod.
