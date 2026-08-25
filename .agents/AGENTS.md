@@ -4,7 +4,7 @@ This document contains critical architectural context, constraints, and operatin
 
 ---
 
-## ⛔ CRITICAL AGENT CONSTRAINTS & BANNED COMMANDS
+## CRITICAL AGENT CONSTRAINTS & BANNED COMMANDS
 
 > [!CAUTION]
 > ### STRICT BAN ON EXECUTING `APPLY` AND `DESTROY` COMMANDS
