@@ -72,42 +72,42 @@ fmt:
 
 # === DEV ENVIRONMENT ===
 dev-init: check-dev-keys
-	@echo "Initializing Dev Environment (Cache: .terraform.dev)..."
-	@$(DEV_ENV_VARS) cd terraform && terraform init -backend-config=environments/dev/backend.conf -reconfigure
+	@echo "Initializing Dev Environment (Cache: terraform/.terraform.dev)..."
+	@$(DEV_ENV_VARS) terraform -chdir=terraform init -backend-config=environments/dev/backend.conf -reconfigure
 
 dev-plan: check-dev-keys
 	@echo "Planning Dev Environment..."
-	@$(DEV_ENV_VARS) cd terraform && terraform plan -var-file=environments/dev/terraform.tfvars
+	@$(DEV_ENV_VARS) terraform -chdir=terraform plan -var-file=environments/dev/terraform.tfvars
 
 dev-apply: check-dev-keys
 	@echo "Applying Dev Environment..."
-	@$(DEV_ENV_VARS) cd terraform && terraform apply -var-file=environments/dev/terraform.tfvars
+	@$(DEV_ENV_VARS) terraform -chdir=terraform apply -var-file=environments/dev/terraform.tfvars
 
 dev-output: check-dev-keys
 	@echo "Fetching Dev Outputs..."
-	@$(DEV_ENV_VARS) cd terraform && terraform output
+	@$(DEV_ENV_VARS) terraform -chdir=terraform output
 
 dev-destroy: check-dev-keys
 	@echo "Destroying Dev Environment..."
-	@$(DEV_ENV_VARS) cd terraform && terraform destroy -var-file=environments/dev/terraform.tfvars
+	@$(DEV_ENV_VARS) terraform -chdir=terraform destroy -var-file=environments/dev/terraform.tfvars
 
 # === PROD ENVIRONMENT ===
 prod-init: check-prod-keys
-	@echo "Initializing Prod Environment (Cache: .terraform.prod)..."
-	@$(PROD_ENV_VARS) cd terraform && terraform init -backend-config=environments/prod/backend.conf -reconfigure
+	@echo "Initializing Prod Environment (Cache: terraform/.terraform.prod)..."
+	@$(PROD_ENV_VARS) terraform -chdir=terraform init -backend-config=environments/prod/backend.conf -reconfigure
 
 prod-plan: check-prod-keys
 	@echo "Planning Prod Environment..."
-	@$(PROD_ENV_VARS) cd terraform && terraform plan -var-file=environments/prod/terraform.tfvars
+	@$(PROD_ENV_VARS) terraform -chdir=terraform plan -var-file=environments/prod/terraform.tfvars
 
 prod-apply: check-prod-keys
 	@echo "Applying Prod Environment..."
-	@$(PROD_ENV_VARS) cd terraform && terraform apply -var-file=environments/prod/terraform.tfvars
+	@$(PROD_ENV_VARS) terraform -chdir=terraform apply -var-file=environments/prod/terraform.tfvars
 
 prod-output: check-prod-keys
 	@echo "Fetching Prod Outputs..."
-	@$(PROD_ENV_VARS) cd terraform && terraform output
+	@$(PROD_ENV_VARS) terraform -chdir=terraform output
 
 prod-destroy: check-prod-keys
 	@echo "Destroying Prod Environment..."
-	@$(PROD_ENV_VARS) cd terraform && terraform destroy -var-file=environments/prod/terraform.tfvars
+	@$(PROD_ENV_VARS) terraform -chdir=terraform destroy -var-file=environments/prod/terraform.tfvars
