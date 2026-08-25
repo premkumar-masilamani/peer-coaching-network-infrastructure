@@ -22,7 +22,7 @@
 | Responsibility Area | Handled By | Details |
 | :--- | :--- | :--- |
 | **GCP Projects & State** | **This Repo (Terraform)** | Project setup, GCS state buckets, service account permissions |
-| **GCP & Firebase APIs** | **This Repo (Terraform)** | Enables all 13 services (Firestore, Auth, Functions, Build, Run, etc.) |
+| **GCP & Firebase APIs** | **This Repo (Terraform)** | Enables all 14 services (Firestore, Auth, Calendar, Functions, Build, Run, etc.) |
 | **Database & Storage** | **This Repo (Terraform)** | Provisions Firestore (`pcn-dev` / `pcn-prod`) with deletion protection and Firebase Storage bucket |
 | **Authentication** | **This Repo (Terraform)** | Identity Platform with Google OAuth Sign-In only (Email, Phone, Anonymous disabled) |
 | **Web App Registration** | **This Repo (Terraform)** | Registers Firebase Web App |
@@ -151,16 +151,43 @@ gcloud iam service-accounts keys create "terraform/environments/prod/.keys/prod-
 
 ## Step 3: OAuth 2.0 Credentials (for Google Sign-In)
 
-Google Sign-In is **mandatory** for the application. To configure OAuth credentials:
+Google Sign-In is **mandatory** for the application. Google Cloud Console manages OAuth 2.0 Web Client credentials as a secure administrative boundary.
 
+### Configuration Steps:
 1. Open [Google Cloud Console Credentials Page](https://console.cloud.google.com/apis/credentials).
-2. Select your project (`pcn-dev-506605` or your prod project).
-3. Configure the **OAuth Consent Screen** (User Type: External, App Name: `Peer Coaching Network`).
-4. Go to **Credentials** -> **Create Credentials** -> **OAuth Client ID** -> **Web application**.
-5. Click **Download JSON** on the created OAuth Client ID.
-6. Save the downloaded JSON directly to:
-   - For Dev: `terraform/environments/dev/.keys/dev-gcp-oauth-client-secret.json`
-   - For Prod: `terraform/environments/prod/.keys/prod-gcp-oauth-client-secret.json`
+2. Select your project (`pcn-dev-506605` for Dev, or your Prod project).
+3. Configure the **OAuth Consent Screen** (if not already configured):
+   - **User Type**: External
+   - **App Name**: `Peer Coaching Network`
+   - **User Support Email** and **Developer Contact Email**: your admin email
+4. Go to **Credentials** -> **+ Create Credentials** -> **OAuth Client ID**.
+5. Select **Application type**: `Web application`.
+6. Set **Name**: `Peer Coaching Network Web (${env})`.
+7. Configure **URIs**:
+
+#### For Development (`pcn-dev-506605`):
+- **Authorized JavaScript origins**:
+  - `https://local.peercoachingnetwork.com:5173`
+  - `https://dev.peercoachingnetwork.com`
+  - `https://pcn-dev-506605.firebaseapp.com`
+  - `http://localhost:5173`
+- **Authorized redirect URIs**:
+  - `https://pcn-dev-506605.firebaseapp.com/__/auth/handler`
+  - `https://dev.peercoachingnetwork.com/__/auth/handler`
+
+#### For Production (`pcn-prod`):
+- **Authorized JavaScript origins**:
+  - `https://app.peercoachingnetwork.com`
+  - `https://<PROD_PROJECT_ID>.firebaseapp.com`
+- **Authorized redirect URIs**:
+  - `https://<PROD_PROJECT_ID>.firebaseapp.com/__/auth/handler`
+  - `https://app.peercoachingnetwork.com/__/auth/handler`
+
+8. Click **Create**.
+9. Click **Download JSON** on the created OAuth Client ID.
+10. Save the downloaded JSON directly to:
+    - For Dev: `terraform/environments/dev/.keys/dev-gcp-oauth-client-secret.json`
+    - For Prod: `terraform/environments/prod/.keys/prod-gcp-oauth-client-secret.json`
 
 *(Note: If either file is missing, Terraform execution will fail fast. For existing projects, obtain them offline from your team leads).*
 

@@ -13,3 +13,8 @@ output "identity_platform_config" {
   description = "Identity platform configuration resource"
   value       = google_identity_platform_config.auth_config.name
 }
+
+output "authorized_domains" {
+  description = "Authorized domains configured in Identity Platform"
+  value       = google_identity_platform_config.auth_config.authorized_domains
+}
