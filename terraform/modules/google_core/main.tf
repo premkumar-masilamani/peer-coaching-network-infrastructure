@@ -33,6 +33,14 @@ resource "google_identity_platform_config" "auth_config" {
       enabled           = true
       password_required = true
     }
+
+    phone_number {
+      enabled = false
+    }
+
+    anonymous {
+      enabled = false
+    }
   }
 
   authorized_domains = concat(
