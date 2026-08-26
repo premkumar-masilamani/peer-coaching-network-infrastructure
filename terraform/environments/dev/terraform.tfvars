@@ -7,7 +7,6 @@ oauth_client_secret_file = "environments/dev/.keys/dev-gcp-oauth-client-secret.j
 
 authorized_domains = [
   "dev.peercoachingnetwork.com",
-  "local.peercoachingnetwork.com",
   "peercoachingnetwork.com"
 ]
 
