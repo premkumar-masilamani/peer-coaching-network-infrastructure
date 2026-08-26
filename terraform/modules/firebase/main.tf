@@ -61,3 +61,16 @@ resource "google_storage_bucket" "app_storage" {
 
   depends_on = [google_firebase_project.firebase]
 }
+
+# 5. Firebase Hosting Custom Domain(s)
+resource "google_firebase_hosting_custom_domain" "custom_domains" {
+  provider = google-beta
+  for_each = toset(var.hosting_custom_domains)
+
+  project               = var.project_id
+  site_id               = var.project_id
+  custom_domain         = each.key
+  wait_dns_verification = false
+
+  depends_on = [google_firebase_project.firebase]
+}

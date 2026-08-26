@@ -31,6 +31,12 @@ variable "authorized_domains" {
   default     = ["localhost"]
 }
 
+variable "hosting_custom_domains" {
+  type        = list(string)
+  description = "Custom domains to connect to Firebase Hosting"
+  default     = []
+}
+
 variable "oauth_client_secret_file" {
   type        = string
   description = "Path to the downloaded OAuth 2.0 Client Secret JSON file (e.g. environments/dev/.keys/dev-gcp-oauth-client-secret.json)"

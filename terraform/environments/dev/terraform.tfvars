@@ -5,4 +5,12 @@ firebase_location        = "asia-south1"
 firestore_database_id    = "pcn-dev"
 oauth_client_secret_file = "environments/dev/.keys/dev-gcp-oauth-client-secret.json"
 
-authorized_domains = ["dev.peercoachingnetwork.com", "local.peercoachingnetwork.com"]
+authorized_domains = [
+  "dev.peercoachingnetwork.com",
+  "local.peercoachingnetwork.com",
+  "peercoachingnetwork.com"
+]
+
+hosting_custom_domains = [
+  "dev.peercoachingnetwork.com"
+]
