@@ -37,3 +37,8 @@ output "authorized_domains" {
   description = "Authorized domains configured for Firebase Authentication / Identity Platform"
   value       = module.google_core.authorized_domains
 }
+
+output "hosting_custom_domains" {
+  description = "Custom domains connected to Firebase Hosting"
+  value       = module.firebase.hosting_custom_domains
+}

@@ -18,3 +18,9 @@ variable "firestore_database_id" {
   type        = string
   description = "The ID of the Firestore database (e.g. pcn-dev or pcn-prod)"
 }
+
+variable "hosting_custom_domains" {
+  type        = list(string)
+  description = "Custom domains to connect to Firebase Hosting"
+  default     = []
+}

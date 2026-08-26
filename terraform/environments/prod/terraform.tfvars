@@ -5,4 +5,11 @@ firebase_location        = "asia-south1"
 firestore_database_id    = "pcn-prod"
 oauth_client_secret_file = "environments/prod/.keys/prod-gcp-oauth-client-secret.json"
 
-authorized_domains = ["app.peercoachingnetwork.com"]
+authorized_domains = [
+  "app.peercoachingnetwork.com",
+  "peercoachingnetwork.com"
+]
+
+hosting_custom_domains = [
+  "app.peercoachingnetwork.com"
+]

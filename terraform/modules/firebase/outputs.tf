@@ -22,3 +22,8 @@ output "app_storage_bucket_name" {
   description = "Application storage bucket name"
   value       = google_storage_bucket.app_storage.name
 }
+
+output "hosting_custom_domains" {
+  description = "Custom domains connected to Firebase Hosting"
+  value       = [for d in google_firebase_hosting_custom_domain.custom_domains : d.custom_domain]
+}
