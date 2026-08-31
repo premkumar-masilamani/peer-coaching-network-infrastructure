@@ -24,3 +24,28 @@ variable "hosting_custom_domains" {
   description = "Custom domains to connect to Firebase Hosting"
   default     = []
 }
+
+variable "app_hosting_site_id" {
+  type        = string
+  description = "Site ID for the Web App Firebase Hosting site"
+  default     = ""
+}
+
+variable "landing_hosting_site_id" {
+  type        = string
+  description = "Site ID for the Landing Page Firebase Hosting site"
+  default     = ""
+}
+
+variable "app_custom_domain" {
+  type        = string
+  description = "Custom domain for the Web App Hosting site"
+  default     = ""
+}
+
+variable "landing_custom_domain" {
+  type        = string
+  description = "Custom domain for the Landing Page Hosting site"
+  default     = ""
+}
+

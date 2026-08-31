@@ -19,11 +19,15 @@ module "google_core" {
 module "firebase" {
   source = "./modules/firebase"
 
-  project_id             = var.project_id
-  environment            = var.environment
-  firebase_location      = var.firebase_location
-  firestore_database_id  = var.firestore_database_id
-  hosting_custom_domains = var.hosting_custom_domains
+  project_id              = var.project_id
+  environment             = var.environment
+  firebase_location       = var.firebase_location
+  firestore_database_id   = var.firestore_database_id
+  hosting_custom_domains  = var.hosting_custom_domains
+  app_hosting_site_id     = var.app_hosting_site_id
+  landing_hosting_site_id = var.landing_hosting_site_id
+  app_custom_domain       = var.app_custom_domain
+  landing_custom_domain   = var.landing_custom_domain
 
   # Ensure google APIs and core infrastructure are ready before adding firebase
   depends_on = [module.google_core]

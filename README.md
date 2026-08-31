@@ -167,12 +167,12 @@ Google Sign-In is **mandatory** for the application. Google Cloud Console manage
 
 #### For Development (`pcn-dev-506605`):
 - **Authorized JavaScript origins**:
-  - `https://dev.peercoachingnetwork.com`
+  - `https://dev-app.peercoachingnetwork.com`
   - `https://pcn-dev-506605.firebaseapp.com`
   - `http://localhost:5173`
 - **Authorized redirect URIs**:
   - `https://pcn-dev-506605.firebaseapp.com/__/auth/handler`
-  - `https://dev.peercoachingnetwork.com/__/auth/handler`
+  - `https://dev-app.peercoachingnetwork.com/__/auth/handler`
 
 #### For Production (`pcn-prod`):
 - **Authorized JavaScript origins**:

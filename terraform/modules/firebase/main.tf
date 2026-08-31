@@ -74,3 +74,46 @@ resource "google_firebase_hosting_custom_domain" "custom_domains" {
 
   depends_on = [google_firebase_project.firebase]
 }
+
+# 6. Dedicated Multi-Site Firebase Hosting (Web App & Landing Page)
+resource "google_firebase_hosting_site" "app_site" {
+  count    = var.app_hosting_site_id != "" ? 1 : 0
+  provider = google-beta
+  project  = var.project_id
+  site_id  = var.app_hosting_site_id
+
+  depends_on = [google_firebase_project.firebase]
+}
+
+resource "google_firebase_hosting_site" "landing_site" {
+  count    = var.landing_hosting_site_id != "" ? 1 : 0
+  provider = google-beta
+  project  = var.project_id
+  site_id  = var.landing_hosting_site_id
+
+  depends_on = [google_firebase_project.firebase]
+}
+
+# 7. Custom Domains for Dedicated Hosting Sites
+resource "google_firebase_hosting_custom_domain" "app_custom_domain" {
+  count                 = var.app_hosting_site_id != "" && var.app_custom_domain != "" ? 1 : 0
+  provider              = google-beta
+  project               = var.project_id
+  site_id               = google_firebase_hosting_site.app_site[0].site_id
+  custom_domain         = var.app_custom_domain
+  wait_dns_verification = false
+
+  depends_on = [google_firebase_project.firebase]
+}
+
+resource "google_firebase_hosting_custom_domain" "landing_custom_domain" {
+  count                 = var.landing_hosting_site_id != "" && var.landing_custom_domain != "" ? 1 : 0
+  provider              = google-beta
+  project               = var.project_id
+  site_id               = google_firebase_hosting_site.landing_site[0].site_id
+  custom_domain         = var.landing_custom_domain
+  wait_dns_verification = false
+
+  depends_on = [google_firebase_project.firebase]
+}
+
