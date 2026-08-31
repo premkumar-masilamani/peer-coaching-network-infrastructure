@@ -58,3 +58,9 @@ output "landing_custom_domain" {
   value       = module.firebase.landing_custom_domain
 }
 
+output "enabled_services" {
+  description = "List of GCP and Firebase APIs enabled by Terraform"
+  value       = module.google_core.enabled_services
+}
+
+

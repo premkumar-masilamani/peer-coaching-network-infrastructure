@@ -18,3 +18,9 @@ output "authorized_domains" {
   description = "Authorized domains configured in Identity Platform"
   value       = google_identity_platform_config.auth_config.authorized_domains
 }
+
+output "enabled_services" {
+  description = "List of GCP and Firebase services/APIs enabled by Terraform"
+  value       = sort([for s in google_project_service.services : s.service])
+}
+
