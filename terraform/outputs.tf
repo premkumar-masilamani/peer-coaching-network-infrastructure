@@ -39,7 +39,7 @@ output "authorized_domains" {
 }
 
 output "app_hosting_site_id" {
-  description = "Firebase Hosting site ID for the Web App"
+  description = "Firebase Hosting site ID for the Web App (Default Firebase site)"
   value       = module.firebase.app_hosting_site_id
 }
 

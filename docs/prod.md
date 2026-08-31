@@ -17,7 +17,7 @@ This document provides step-by-step instructions for bootstrapping, credential p
 | **Terraform Cache** | `terraform/.terraform.prod` |
 | **Web App Custom Domain** | `https://app.peercoachingnetwork.com` |
 | **Landing Page Custom Domain** | `https://www.peercoachingnetwork.com` |
-| **Hosting Sites** | `prod-app-507207` (App), `prod-landing-507207` (Landing) |
+| **Hosting Sites** | `pcn-prod-507207` (App - Default Site), `prod-landing-507207` (Landing) |
 
 ---
 
