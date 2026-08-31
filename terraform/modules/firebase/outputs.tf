@@ -24,8 +24,8 @@ output "app_storage_bucket_name" {
 }
 
 output "app_hosting_site_id" {
-  description = "Firebase Hosting site ID for the Web App"
-  value       = length(google_firebase_hosting_site.app_site) > 0 ? google_firebase_hosting_site.app_site[0].site_id : null
+  description = "Firebase Hosting site ID for the Web App (Default Firebase site)"
+  value       = var.project_id
 }
 
 output "landing_hosting_site_id" {

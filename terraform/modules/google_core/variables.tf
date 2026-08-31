@@ -26,7 +26,8 @@ variable "enable_services" {
     "artifactregistry.googleapis.com",
     "run.googleapis.com",
     "calendar-json.googleapis.com",
-    "firebasehosting.googleapis.com"
+    "firebasehosting.googleapis.com",
+    "cloudscheduler.googleapis.com"
   ]
 }
 

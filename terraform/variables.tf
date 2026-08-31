@@ -36,11 +36,6 @@ variable "oauth_client_secret_file" {
   description = "Path to the downloaded OAuth 2.0 Client Secret JSON file (e.g. environments/dev/.keys/dev-gcp-oauth-client-secret.json)"
 }
 
-variable "app_hosting_site_id" {
-  type        = string
-  description = "Site ID for the Web App Firebase Hosting site"
-  default     = ""
-}
 
 variable "landing_hosting_site_id" {
   type        = string
