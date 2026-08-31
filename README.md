@@ -38,7 +38,7 @@ Detailed, copy-paste ready bootstrap and operational instructions are maintained
 | Responsibility Area | Handled By | Details |
 | :--- | :--- | :--- |
 | **GCP Projects & State** | **This Repo (Terraform)** | Project setup, GCS state buckets, service account permissions |
-| **GCP & Firebase APIs** | **This Repo (Terraform)** | Enables all 15 services (Firestore, Auth, Calendar, Functions, Build, Run, etc.) |
+| **GCP & Firebase APIs** | **This Repo (Terraform)** | Enables all 16 services (Firestore, Auth, Calendar, Functions, Scheduler, Build, Run, etc.) |
 | **Database & Storage** | **This Repo (Terraform)** | Provisions Firestore (`pcn-dev` / `pcn-prod`) with deletion protection and Firebase Storage bucket |
 | **Authentication** | **This Repo (Terraform)** | Identity Platform with Google OAuth Sign-In only (Email, Phone, Anonymous disabled) |
 | **Web App Registration** | **This Repo (Terraform)** | Registers Firebase Web App |
