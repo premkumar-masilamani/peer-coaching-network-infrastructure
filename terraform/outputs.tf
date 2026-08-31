@@ -38,7 +38,23 @@ output "authorized_domains" {
   value       = module.google_core.authorized_domains
 }
 
-output "hosting_custom_domains" {
-  description = "Custom domains connected to Firebase Hosting"
-  value       = module.firebase.hosting_custom_domains
+output "app_hosting_site_id" {
+  description = "Firebase Hosting site ID for the Web App"
+  value       = module.firebase.app_hosting_site_id
 }
+
+output "landing_hosting_site_id" {
+  description = "Firebase Hosting site ID for the Landing Page"
+  value       = module.firebase.landing_hosting_site_id
+}
+
+output "app_custom_domain" {
+  description = "Custom domain for Web App Hosting"
+  value       = module.firebase.app_custom_domain
+}
+
+output "landing_custom_domain" {
+  description = "Custom domain for Landing Page Hosting"
+  value       = module.firebase.landing_custom_domain
+}
+
