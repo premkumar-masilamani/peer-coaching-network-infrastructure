@@ -23,7 +23,6 @@ module "firebase" {
   environment             = var.environment
   firebase_location       = var.firebase_location
   firestore_database_id   = var.firestore_database_id
-  hosting_custom_domains  = var.hosting_custom_domains
   app_hosting_site_id     = var.app_hosting_site_id
   landing_hosting_site_id = var.landing_hosting_site_id
   app_custom_domain       = var.app_custom_domain

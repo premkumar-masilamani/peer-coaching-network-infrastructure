@@ -38,11 +38,6 @@ output "authorized_domains" {
   value       = module.google_core.authorized_domains
 }
 
-output "hosting_custom_domains" {
-  description = "Custom domains connected to Firebase Hosting"
-  value       = module.firebase.hosting_custom_domains
-}
-
 output "app_hosting_site_id" {
   description = "Firebase Hosting site ID for the Web App"
   value       = module.firebase.app_hosting_site_id

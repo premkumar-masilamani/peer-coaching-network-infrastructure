@@ -15,5 +15,4 @@ authorized_domains = [
   "peercoachingnetwork.com"
 ]
 
-hosting_custom_domains = []
 
